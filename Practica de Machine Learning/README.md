@@ -1,4 +1,5 @@
 Un script de Python con cada modelo necesario que contenga una clase, estas clases tendrá 5 métodos públicos y todos los métodos privados que sean necesarios.
+-
 -El __init__ al que se le deberán pasar los parámetros que se consideren oportunos.
 
 -Un método llamado fit que recibirá unos datos de entrada en formato "Data Frame" o “numpy array” y que entrenará el modelo, guardando los pesos y demás atributos que se consideren necesario guardar dentro del self de la clase.
@@ -12,6 +13,7 @@ Un script de Python con cada modelo necesario que contenga una clase, estas clas
 --------------------------------------------------------------
 
 Fuera de este paquete debe de haber 4 archivos más.
+-
 -Un archivo llamado preprocess_data.py el cual realizará las transformaciones, limpiezas de datos y cambios requeridos comunes para todos los modelos. Las transformaciones específicas de cada modelo deberán realizarse dentro de su clase correspondiente, no en este fichero. Debe de recibir dos argumentos de entrada, uno con la ruta del fichero de datos “en crudo” y otro con la ruta donde dejar los datos ya limpios y procesados para los modelos.
 
 -Un archivo llamado train_models.py que importará dicho paquete, instanciará los modelos, los entrenará invocando el método "fit" de cada uno con el conjunto de datos y luego serializará a disco lo aprendido mediante el método "save". Tanto la ruta desde donde leer los datos de origen como las rutas a donde guardar los ficheros pickle de cada modelo se deberán obtener de un fichero de configuración en formato configparser al que llamaremos train.conf. La ruta de este fichero de configuración se le deberá pasar como argumento al script y se deberá utilizar la librería argparse para procesar dicho argumento.
