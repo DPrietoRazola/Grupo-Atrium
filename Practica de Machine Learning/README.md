@@ -8,6 +8,7 @@ Un script de Python con cada modelo necesario que contenga una clase, estas clas
 -Un método llamado save que permita guardar en disco serializado en pickle los datos guardados dentro de la clase (pesos, estados de objetos preprocesadores…), que permitan en el futuro poder seguir utilizando el modelo sin reentrenarlo.
 
 -Un método llamado load que permita volver a cargar de disco el estado de la propia clase para poder volver a llamar a predict en una futura sesión sin tener que “reentrenar” el modelo.
+
 --------------------------------------------------------------
 
 Fuera de este paquete debe de haber 4 archivos más.
@@ -18,6 +19,7 @@ Fuera de este paquete debe de haber 4 archivos más.
 -Un archivo llamado inference_model.py que instanciará un modelo, leerá mediante el método "load" lo ya aprendido y realizará la inferencia de nuevos datos. Recibirá tres argumentos de entrada, y se deberá utilizar la librería argparse para procesar dichos argumentos. Estos argumentos serán el tipo de modelo que se debe utilizar para hacer inferencia, los pesos concretos a utilizar de dicho modelo y el fichero de datos de entrada sobre el cual queremos realizar la inferencia.
 
 -Un notebook de Jupyter, al que llamaremos exploratory_analysis.ipynb. Este notebook se deben cargar los datos, realizar un análisis exploratorio exhaustivo intentando sacar la mayor parte de información posible de los mismos y luego se deben probar con los datos todas las técnicas y modelos que apliquen a la resolución del problema vistos durante el módulo 3 (machine learning). Se debe comparar el rendimiento de cada técnica que esté orientada al mismo propósito y mediante este procedimiento elegir las que finalmente se industrializarán dentro del paquete models. Asimismo, no solo se deben comparar técnica a técnica, sino que una vez elegida una de ellas, se tienen que intentar encontrar los hiperparámetros óptimos y las transformaciones de los datos de entrada más adecuadas para obtener los mejores resultados.
+
 --------------------------------------------------------------
 
 
@@ -26,14 +28,20 @@ Ahora vamos a hablar sobre el dataset utilizado y los problemas de negocio que q
 Se deberán probar todos los modelos posibles para cada uno de los siguientes problemas de negocio, industrializando en el paquete solamente el mejor de ellos para cada uno de los casos, con los mejores hiperparámetros y transformaciones previas encontradas.
 
 Clasificación:
+-------------
 
 Reto normal: Crear un clasificador que prediga la categoría del vídeo.
 Reto opcional para subir nota: Crear un algoritmo de clasificación que intente averiguar lo mejor posible si los comentarios o los ratings estarán deshabilitados por parte del creador del vídeo en base al resto de la información. Al ser una clasificación altamente desbalanceada se valorará no solo obtener una alta precisión, sino también estudiar en una matriz de confusión si se sega excesivamente hacia la clase mayoritaria y en el caso de que ocurra intentar mitigar este hecho.
 
 Regresión:
+----------
 Reto normal: Intentar predecir el número de likes.
 Reto opcional para subir nota: Intentar predecir la ratio de likes/dislikes de cada vídeo.
 
-Clusterización: Intentar encontrar grupos en los vídeos mediante diversas técnicas de clusterización. Evaluar cómo se superpone cada una con respecto a las categorías de los vídeos. Utilizar las técnicas de reducción de dimensionalidad.
+Clusterización:
+---------------
+Intentar encontrar grupos en los vídeos mediante diversas técnicas de clusterización. Evaluar cómo se superpone cada una con respecto a las categorías de los vídeos. Utilizar las técnicas de reducción de dimensionalidad.
 
-Recomendación: Crear un recomendador que dado un vídeo te recomiende vídeos parecidos.
+Recomendación: 
+-------------
+Crear un recomendador que dado un vídeo te recomiende vídeos parecidos.
