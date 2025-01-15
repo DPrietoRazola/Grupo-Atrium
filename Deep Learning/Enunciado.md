@@ -22,8 +22,8 @@ Se deberá conseguir una red neuronal convolucional de clasificación pre-entren
 
 Clasificador de vídeos 
 -
-
 Se utilizarán las inferencias del modelo anterior como input para entrenar el clasificador de tipo de vídeo. Hay que tener en cuenta que los inputs son variables en tamaño ya que dependerán de la longitud del vídeo y su framerate, por lo que habrá realizar un post procesado de estos datos para que puedan ser utilizados como input a un clasificador al uso. Se sugiere por ejemplo crear un variable de entrada por cada tipo de objeto posible y asignarle como valor la "importancia" de dicho objeto en el vídeo. Esta "importancia" se podría calcular en base al número de fotogramas en los que aparece, así como teniendo en cuenta la "confiabilidad".
+
 Bonus para subir nota: Detector de objetos basado en segmentación semántica.
 -
 Las imágenes de las películas pueden contener más de un objeto. Se sugiere que se use un modelo pre-entrenado de segmentación semántica (como MaskRCNN entrenado con MSCOCO) para crear un detector similar al primero. Este nuevo detector debe inferenciar un csv parecido al anterior, pero añadiendo una línea por cada objeto detectado en cada fotograma. Además, sería recomendable poner una nueva columna con el % de la imagen que ocupa dicho objeto (no es lo mismo un objeto que aparezca en primer plano que uno alejado). También, al igual que en el primer detector, se podrá hacer un transfer learning para un conjunto de clases que nos interesen especialmente si se cree necesario.
