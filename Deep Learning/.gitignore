@@ -1,2 +1,15 @@
-frames/
-videos/
+# Ignorar carpetas de videos y frames
+data/raw_videos/
+data/frames/
+data/detections/
+
+# Ignorar archivos específicos
+*.mp4
+*.mkv
+*.avi
+*.jpg
+*.jpeg
+*.png
+
+# Otros archivos grandes
+*.part

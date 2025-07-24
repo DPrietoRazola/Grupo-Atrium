@@ -1,4 +1,22 @@
-El objetivo de esta práctica consiste en resolver una problemática de negocio mediante las técnicas que hemos aprendido en el módulo de Deep Learning. 
-Asimismo, para emular el tipo de proyectos a los que un científico de datos puede enfrentarse, se dejará bastante libertad creativa, 
-para que elija y busque sus propias fuentes de datos, algoritmos pre-hechos y pre-entrenados, que investigue el estado del arte, 
-para de manera creativa y original resolver el problema de negocio que se propone combinado todos estos elementos inteligentemente.
+# 🎬 Sistema de Recomendación de Vídeos basado en Contenido
+
+Proyecto de Deep Learning que recomienda vídeos similares basándose en los objetos que aparecen en los fotogramas.
+
+## 📋 Descripción del Proyecto
+
+Este sistema recomienda vídeos similares analizando los objetos presentes en los fotogramas. La premisa es que dos vídeos son más similares cuantos más objetos similares contienen.
+
+## 📁 Estructura del Proyecto
+
+Deep Learning/
+├── config.py # Configuración del proyecto
+├── src/ # Código fuente
+│ ├── init .py # Paquete Python
+│ ├── downloader.py # Descarga de vídeos de YouTube
+│ ├── frame_extractor.py # Extracción de fotogramas
+│ ├── detector.py # Detección de objetos
+│ └── ver_resultados.py # Verificación de resultados
+├── data/ # Datos del proyecto
+│ ├── raw_videos/ # Vídeos originales descargados
+│ ├── frames/ # Fotogramas extraídos
+│ └── detections/ # Resultados de detección
