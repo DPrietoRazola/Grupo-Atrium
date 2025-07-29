@@ -1,79 +1,108 @@
 """
-Script para descargar videos de YouTube según las especificaciones del proyecto.
-Descarga al menos 100 videos por categoría.
+Descarga de videos de YouTube.
 """
 
 import yt_dlp
 import os
-import random
+from concurrent.futures import ThreadPoolExecutor
+import threading
 import time
 
-def descargar_videos(consulta, directorio_destino, cantidad=100):
-    """
-    Descarga videos de YouTube con calidad baja para ahorrar espacio.
+# Bloqueo para threads
+lock = threading.Lock()
+
+def descargar_video_rapido(url_info, directorio_destino):
+    """Descarga de videos rápidamente."""
+    try:
+        ydl_opts = {
+            'outtmpl': os.path.join(directorio_destino, '%(id)s.%(ext)s'),
+            'format': 'worst[ext=mp4]/worst',  # Calidad mínima
+            'ignoreerrors': True,
+            'quiet': True,  # Silencioso
+            'nocheckcertificate': True,
+            'ratelimit': 512*1024,  # Aumentar velocidad a 512 KB/s
+            'merge_output_format': 'mp4',
+            'noplaylist': True,
+            'nooverwrites': True,
+        }
+        
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            ydl.download([url_info['url']])
+            
+        with lock:
+            print(f"{url_info['id']}")
+            
+    except Exception as e:
+        with lock:
+            print(f"{url_info['id'][:10]}...")
+
+def buscar_y_descargar_rapido(consulta, directorio_destino, cantidad=100):
+    """Busca y descarga videos en paralelo (optimizado)"""
     
-    Args:
-        consulta (str): Término de búsqueda
-        directorio_destino (str): Carpeta donde guardar los videos
-        cantidad (int): Número de videos a descargar (100 según enunciado)
-    """
-    ydl_opts = {
-        'outtmpl': os.path.join(directorio_destino, '%(title)s-%(id)s.%(ext)s'),
-        'format': 'worstvideo[height<=144][ext=mp4]+worstaudio[ext=m4a]/worst[ext=mp4]/worst',
+    print(f"Buscando {cantidad} videos de: {consulta}")
+    
+    # Buscar videos primero
+    search_opts = {
+        'quiet': True,
         'ignoreerrors': True,
-        'quiet': False,
-        'nocheckcertificate': True,
-        'ratelimit': 512*1024,  # Limitar velocidad para evitar bloqueos
-        'merge_output_format': 'mp4',
-        'max_downloads': cantidad,
+        'extract_flat': True,  # Solo metadatos
     }
     
-    try:
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            search_query = f"ytsearch{cantidad}:{consulta}"
-            ydl.download([search_query])
-            print(f"Descarga de '{consulta}' completada ({cantidad} videos).")
-    except Exception as e:
-        print(f"Error al descargar videos '{consulta}': {e}")
-
-def descargar_categorias(categorias, directorio_base="data/raw_videos", cantidad=100):
-    """
-    Descarga videos para todas las categorías especificadas.
+    urls_info = []
+    with yt_dlp.YoutubeDL(search_opts) as ydl:
+        search_query = f"ytsearch{cantidad}:{consulta}"
+        result = ydl.extract_info(search_query, download=False)
+        
+        if 'entries' in result:
+            for entry in result['entries'][:cantidad]:
+                if entry and 'id' in entry and 'url' in entry:
+                    urls_info.append({
+                        'id': entry['id'],
+                        'url': entry['url']
+                    })
     
-    Args:
-        categorias (dict): Diccionario {categoria: consulta}
-        directorio_base (str): Directorio base para guardar videos
-        cantidad (int): Número de videos por categoría (100 según enunciado)
-    """
-    total_videos = 0
+    print(f"Descargando {len(urls_info)} videos en paralelo (8 simultáneos)...")
+    
+    # Descargar en paralelo
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        futures = []
+        for url_info in urls_info:
+            future = executor.submit(descargar_video_rapido, url_info, directorio_destino)
+            futures.append(future)
+        
+        # Esperar a que terminen
+        for future in futures:
+            future.result()
+
+def descargar_todas_categorias_rapido():
+    """Descarga todas las categorías de videos (optimizada)"""
+    
+    categorias = {
+        "coches": "car crash compilation short",
+        "mascotas": "funny cat compilation short", 
+        "comida": "fast food commercial short"
+    }
+    
+    directorio_base = "data/raw_videos"
+    os.makedirs(directorio_base, exist_ok=True)
+    
+    print("DESCARGA DE VIDEOS DE YOUTUBE")
+    print("=" * 55)
+    
+    start_time = time.time()
+    
     for categoria, consulta in categorias.items():
         directorio_categoria = os.path.join(directorio_base, categoria)
         os.makedirs(directorio_categoria, exist_ok=True)
-        print(f"Descargando categoría: {categoria} ({cantidad} videos)")
-        descargar_videos(consulta, directorio_categoria, cantidad)
-        # Espera aleatoria para evitar bloqueos
-        time.sleep(random.randint(2, 5))
-        total_videos += cantidad
+        print(f"\n{categoria.upper()} ({consulta}):")
+        
+        buscar_y_descargar_rapido(consulta, directorio_categoria, cantidad=100)  # Reducir a 100 por ahora
+        
+        time.sleep(1)  # Pequeña pausa
     
-    print(f"¡Descarga completa! {total_videos} videos en total.")
-
-# Categorías según el enunciado
-categorias = {
-    "coches": "coches deportivos",      # Categoría 1
-    "mascotas": "perros graciosos",     # Categoría 2  
-    "comida": "recetas faciles"         # Categoría 3
-}
+    total_time = time.time() - start_time
+    print("\n" + "=" * 55)
+    print(f"¡TODO LISTO! Tiempo total: {total_time/60:.1f} minutos")
 
 if __name__ == "__main__":
-    print("Iniciando descarga de videos según enunciado (100 por categoría)")
-    print("=" * 60)
-    print("Requisitos cumplidos:")
-    print("  • 3 categorías: coches, mascotas, comida")
-    print("  • 100 videos por categoría")
-    print("  • Calidad baja para optimizar tiempo")
-    print("=" * 60)
-    
-    descargar_categorias(categorias, cantidad=100)  # 100 como pide el enunciado
-    
-    print("\n¡Proceso de descarga finalizado!")
-    print("Ahora ejecuta: python src/frame_extractor.py")
+    descargar_todas_categorias_rapido()

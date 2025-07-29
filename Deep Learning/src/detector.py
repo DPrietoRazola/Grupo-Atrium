@@ -1,6 +1,6 @@
 """
 Detector de objetos basado en clasificador pre-entrenado.
-Implementa la detección de objetos en fotogramas según el enunciado del proyecto.
+Implementa la detección de objetos en fotogramas.
 """
 
 import torch
