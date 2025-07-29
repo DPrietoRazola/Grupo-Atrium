@@ -38,7 +38,7 @@ def process_all_videos():
     total_videos = 0
     processed_videos = 0
     
-    print("🎬 PROCESANDO CADA VÍDEO según enunciado...")
+    print("PROCESANDO CADA VÍDEO según enunciado...")
     print("=" * 50)
     
     for category in categories:
